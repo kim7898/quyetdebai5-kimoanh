@@ -26,7 +26,7 @@
                    
 <a href="#"><button  id="no" style="background-color: red">Sai/không/trái</button></a>
 <button>câu hỏi khác</button>
-<a href="" id="xemketqua"><button id="xemketqua">kết quả vote</button></a>
+<a href="/ketqua" id="xemketqua"><button id="xemketqua">kết quả vote</button></a>
              
     
     <script>
@@ -49,34 +49,26 @@ $.ajax({
 
         }
     })
-$("#xemketqua").on("click", function(event){
-    $("a").attr("href",'/vote/' + question.id )
-})
+// $("#xemketqua").on("click", function(event){
+//     $("a").attr("href",'/vote/' + question.id )
+// })
 
 $("#yes, #no ").on("click", function(event){
        console.log(event.target.id);
  
              ;
        if(event.target.id  === "yes"){
-           question.yes+=1;     
-            // $("a").attr("href",'/vote/' + question.id +"/yes" )
+              
+             $("a").attr("href",'/vote/' + question.id +"/yes" )
        } else{
-           question.no+=1;
-            // $("a").attr("href",'/vote/' + question.id +"/no")
+           
+             $("a").attr("href",'/vote/' + question.id +"/no")
        }  
 
-        $.ajax({
-            url:"/editquestion",
-            type :"PUT",
-            data:question,
-            success:function(data){
-             
-
-
-            }
-        })             
+                
         
     });
+    
 
    
   

@@ -67,30 +67,32 @@ app.post("/addquestion", (req, res)=>{
     res.redirect("/ask");
 
 })
-app.put("/editquestion", (req,res)=>{
+
+
+
+  app.get("/vote/:questionid/no" , (req, res)=>{ 
+     const questionlist = JSON.parse(fs.readFileSync("./writer.json", 'utf8')) 
+    const questionid= req.params.questionid 
+  
+ questionlist[questionid].no=Number(questionlist[questionid].no)+1;
+  question = questionlist[questionid]
+  
+   fs.writeFileSync('./writer.json', JSON.stringify(questionlist))  
+   res.sendfile(__dirname+ "/views/vote.html");
+  
+   })
+   app.get("/vote/:questionid/yes" , (req, res)=>{ 
     const questionlist = JSON.parse(fs.readFileSync("./writer.json", 'utf8')) 
+   const questionid= req.params.questionid 
+ 
+questionlist[questionid].yes=Number(questionlist[questionid].yes)+1;
+question = questionlist[questionid]
 
-const question = req.body ;
-questionlist[question.id]=question;
-fs.writeFileSync('./writer.json', JSON.stringify(questionlist))  
-res.send()
-
-})
- app.get("/vote/:questionid", (req, res)=>{ 
-
- res.sendFile(__dirname+ "/views/vote.html");
- })
-// //  app.get("/vote/:questionid/no" , (req, res)=>{ 
-//     const questionlist = JSON.parse(fs.readFileSync("./writer.json", 'utf8')) 
-//     const questionid= req.params.questionid 
-  
-//    questionlist[questionid].no=Number(questionlist[questionid].no)+1;
-  
-  
-//    fs.writeFileSync('./writer.json', JSON.stringify(questionlist))  
- //  res.send()
-  
-// //    })
+ 
+  fs.writeFileSync('./writer.json', JSON.stringify(questionlist))  
+  res.sendfile(__dirname+ "/views/vote.html");
+ 
+  })
 app.put("/vote" ,  (req,res)=>{
     
 
