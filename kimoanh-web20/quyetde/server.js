@@ -73,7 +73,7 @@ app.put("/editquestion", (req,res)=>{
 const question = req.body ;
 questionlist[question.id]=question;
 fs.writeFileSync('./writer.json', JSON.stringify(questionlist))  
-res.redirect("/vote")
+res.send()
 
 })
  app.get("/vote/:questionid", (req, res)=>{ 

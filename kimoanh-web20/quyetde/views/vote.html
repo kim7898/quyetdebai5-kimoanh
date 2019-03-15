@@ -23,8 +23,8 @@
      <h3 id="no" ></h3>
     <script>
         var url= window.location.href;
-         var arr= url.split("/");
-         var questionid=arr[arr.length-1];
+        
+         var questionid=url.substring(27)
         $.ajax({
             url:"/vote",
             type :"put",
@@ -37,7 +37,7 @@
                 let no = Number(data.no);
                 let sum = yes+no
                 let yesnumber= parseFloat((yes/sum)*100).toFixed(1);
-                let nonumber = 100-yesnumber
+                let nonumber = parseFloat(100-yesnumber).toFixed(1)
                 $("#yes").text("yes : " + yesnumber+"%")
                 $("#no").text("no : " +nonumber+"%")
              
