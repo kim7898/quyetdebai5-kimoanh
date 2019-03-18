@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script
+    src="http://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    
+</head>
+<body>
+    
+
+    <nav>
+       <a href="#">QUYẾT ĐÊ</a>
+        <a href="/ask">hỏi nhanh</a>
+        <a href="/">đáp gọn</a>
+    </nav>
+    <h2>Question</h2>
+  
+  
+<a href="#"><button id="yes" style="background-color: blue">Đúng/có/phải</button></a>
+                   
+<a href="#"><button  id="no" style="background-color: red">Sai/không/trái</button></a>
+<button>câu hỏi khác</button>
+<a href="/ketqua" id="xemketqua"><button id="xemketqua">kết quả vote</button></a>
+             
+    
+    <script>
+      
+//         $(document).ready(function(){
+//             $.get("http://localhost:1998/randomquestion", function(data){
+//                 $("h1" ).html(data)
+//     });
+
+let question 
+
+$.ajax({
+        url:"/randomquestion",
+        success: function(data){
+            
+            $('h2').text(data.content)
+            
+         
+            question=data
+        $("a").attr("href",'/vote/' + question.id +"/yes" )
+             $("a").attr("href",'/vote/' + question.id +"/no")
+
+        }
+    })
+// $("#xemketqua").on("click", function(event){
+//     $("a").attr("href",'/vote/' + question.id )
+// })
+
+$("#yes, #no ").on("click", function(event){
+       console.log(event.target.id);
+ 
+             ;
+       if(event.target.id  === "yes"){
+              
+             question.yes+=1;
+       } else{
+           question.no+=1;
+       }  
+
+                
+        
+    });
+    
+
+   
+  
+   
+ </script>
+</body>
+</html>

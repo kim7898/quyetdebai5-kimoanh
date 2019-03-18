@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>quyết đê</title>
+</head>
+<body>
+    <nav>
+        <a href="/ask">hỏi nhanh</a>
+        <a href="/">đáp gọn</a>
+    </nav>
+    <h1>hãy hỏi cộng đồng một câu hỏi đúng / sai hoặc có  hoặc không</h1>
+    <form method="POST" action="http://localhost:8080/addquestion">
+        <textarea name="question" rows="10" cols="30" id="questionInput" onkeyup="limitcharacter(this)"></textarea>
+        <span id="remain">còn 200/200 ký tự</span>
+        <button>gửi</button>
+    </form>
+    <script>
+
+        // console.log(document.querySelector("#questionInput"));
+        //----------------------------------------//
+        // const questionInputElem=document.getElementById("questionInput");
+        // questionInputElem.addEventListener("input",()=>{
+    
+        //     const remainChar= 200- questionInputElem.value.length;
+        //     document.getElementById("remain").innerText="còn"+remainChar+"/200 ký tự"
+
+        // });
+        function limitcharacter(character){
+            var lengthcharacter = character.value.length;
+            if (lengthcharacter > 200) {
+        character.value = character.value.substring(0, 200);
+            } else {
+                document.getElementById('remain').innerText = "Còn "+(200-lengthcharacter)+"/200 ký tự";
+            }
+        
+        }
+
+    
+    </script>
+    
+</body>
+</html>
