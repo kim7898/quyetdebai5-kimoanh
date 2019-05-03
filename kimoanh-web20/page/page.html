@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Udemy</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<link rel="stylesheet" href="style.css">
+
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+    <style>
+    .lds-heart {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+  transform: rotate(45deg);
+  transform-origin: 32px 32px;
+}
+.lds-heart div {
+  top: 23px;
+  left: 19px;
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  background:rgb(255, 0, 179);
+  animation: lds-heart 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.lds-heart div:after,
+.lds-heart div:before {
+  content: " ";
+  position: absolute;
+  display: block;
+  width: 26px;
+  height: 26px;
+  background: rgb(255, 0, 179);
+}
+.lds-heart div:before {
+  left: -17px;
+  border-radius: 50% 0 0 50%;
+}
+.lds-heart div:after {
+  top: -17px;
+  border-radius: 50% 50% 0 0;
+}
+@keyframes lds-heart {
+  0% {
+    transform: scale(0.95);
+  }
+  5% {
+    transform: scale(1.1);
+  }
+  39% {
+    transform: scale(0.85);
+  }
+  45% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+    </style>
+</head>
+<body>
+	<div class="container">
+		<form id="searchCourse">
+			<div class="form-group">
+				<input required id="keyword" type="text" class="form-control" placeholder="Gõ từ khoá tìm kiếm">
+			</div>
+			<div class="" id='select'>
+					<span class="mt-2" >Price: </span>
+					<select class="form-control" id="price">
+							<option value=""></option>
+							<option value="price-paid">Paid</option>
+							<option value="price-free">Free</option>
+					</select>            
+			</div>
+			<button type="submit" class="btn btn-primary">Tìm kiếm</button>
+		</form>
+		<div id="results">
+
+		</div>
+		<div class="text-center"><div id="loading" class="lds-heart"><div></div></div></div>
+		
+    </div>
+    <script>
+    var nextPageUrl = null;
+var loadingMore = false;
+$(document).ready(function() {
+	$("#loading").hide();
+	$("#searchCourse").on("submit", function(event) {
+		event.preventDefault();
+
+		const keyword = $("#keyword").val();
+		const price = $("#price").val();
+		// $("#results").html('');
+		$("#results").empty();
+		$("#loading").show();
+		
+		loadData(`https://api.techkids.vn/udemy/courses?search=${keyword}&price=${price}`);
+	});
+
+	$(window).on("scroll", function() {
+		if(!loadingMore && nextPageUrl && $(document).height() - ($(window).height() + $(window).scrollTop()) < 400) {
+			loadingMore = true;
+			$("#loading").show();
+			loadData(nextPageUrl);
+		}
+	});
+});
+
+function loadData(url) {
+	$.ajax({
+		url: url,
+		type: "GET",
+		success: function(data) {
+			const { results, next } = data;
+
+			nextPageUrl = next;
+
+			// [1,2,3].map(function(item, index) { return item*2; }) =====> [2,4,6]
+			const resultsElem = results.map(function(item) {
+				return `<div class="card" style="width: 20rem;">
+					<img src="${item.image_480x270}" class="card-img-top" alt="">
+					<div class="card-body">
+						<h5 class="card-title">${item.title}</h5>
+						<p class="card-text"></p>
+						<a target="_blank" href="https://udemy.com${item.url}" class="btn btn-primary">View course</a>
+					</div>
+				</div>`;
+			});
+
+			$("#results").append(resultsElem);
+			$("#loading").hide();
+			loadingMore = false;
+		},
+		error: function(err) {
+			console.log(err);
+		}
+	});
+}
+    </script>
+</body>
+</html>

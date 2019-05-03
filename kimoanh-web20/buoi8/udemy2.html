@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Udemy demo</title>
+    <script
+  src="http://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./udemy.css">
+</head>
+<body>
+    <div id="div-form">
+        <form >
+            <input id="input" type="text" name="udemy">
+            <input type="submit" value="Tìm kiếm">
+        </form>
+        <div id="total-course">
+
+        </div>
+    </div>
+
+    <script>
+        let nextUrl;
+        $("form").submit(event => {
+            event.preventDefault();
+            const keyword = $("#input").val();
+            $.ajax({
+                type: "GET",
+                url: "http://api.techkids.vn/udemy/courses?page=2&page_size=12",
+                success: data => {
+                    console.log(data);
+                    nextUrl = data.next;
+                    data.results.forEach(ele => {
+                        $("#total-course").append(`
+                        <div class="course">
+                            <h2>${ele.title}</h2>
+                            <a href="https://www.udemy.com${ele.url}"><img src=${ele.image_480x270} href="abc"></a>
+                        </div>    
+                        `);
+                    })
+                }
+            })
+        })
+        let isLoading = false;
+        $(window).on("scroll", () =>{
+                console.log($(document).height() - $(window).height() - $(window).scrollTop());
+                if($(document).height() - $(window).height() - $(window).scrollTop() < 100 && !isLoading){
+                    isLoading = true;
+                    $.ajax({
+                        type: "GET",
+                        url: nextUrl,
+                        success: data => {
+                            console.log(data);
+                            nextUrl = data.next;
+                            data.results.forEach(ele => {
+                                $("#total-course").append(`
+                                <div class="course">
+                                    <h2>${ele.title}</h2>
+                                    <a href="https://www.udemy.com${ele.url}"><img src=${ele.image_480x270} href="abc"></a>
+                                </div>    
+                                `);
+                            })
+                            isLoading = false;
+                        }
+                })
+                }
+            })
+    </script>
+</body>
+</html>

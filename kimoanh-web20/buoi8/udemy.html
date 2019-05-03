@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div><img src="https://www.udemy.com/staticx/udemy/images/v6/logo-coral.svg" alt=""></div>
+    <div>
+        <input type="text" placeholder="keyword" id="keyword">
+        <button id="search">search</button>
+        <div id="content"></div>
+    </div>
+    <script>
+        let nextUrl = "";
+        let preLoad = true;
+        $("#search").on("click", () => {
+            $("#content").html("");
+            const kw = $("#keyword").val();
+            $.ajax({
+                url: `https://api.techkids.vn/udemy/courses?search=${kw}&page=1&page_size=12`,
+                success: (data) => {
+                    nextUrl = data.next;
+                    const resultt = data.results;
+                    for (let i = 0; i < 12; i++) {
+                        const htmll =
+                            `
+                                <img src="${resultt[i].visible_instructors[0].image_50x50}" alt="" id="img">
+                                <p>Title: ${resultt[i].title} </p>
+                                <p>Price : ${resultt[i].price}</p>`;
+                        $("#content").append(htmll);
+                    };
+                }
+            });
+        });
+        $(window).scroll(function () {
+            console.log($(document).height() - $(window).height() - $(window).scrollTop());
+            if (($(document).height() - $(window).height() - $(window).scrollTop() < 500) & preLoad === true) {
+                preLoad = false;
+                $.ajax({
+                    url: nextUrl,
+                    success: (data) => {
+                        const resultt = data.results;
+                        nextUrl = data.next;
+                        for (let i = 0; i < 12; i++) {
+                            const htmll =
+                                `
+                                <img src="${resultt[i].visible_instructors[0].image_50x50}" alt="" id="img">
+                                <p>Title: ${resultt[i].title} </p>
+                                <p>Price : ${resultt[i].price}</p>`;
+                            $("#content").append(htmll);
+                            preLoad = true;
+                        };
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

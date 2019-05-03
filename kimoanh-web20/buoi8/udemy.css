@@ -1,0 +1,18 @@
+.course{
+    display: inline-block;
+    border: 1px solid red;
+    width: 20%;
+    height: auto;
+}
+#total-course{
+    border: 2px solid purple;
+    display: flexbox;
+}
+img{
+    width: 100%;
+    height: auto;
+}
+
+#div-form {
+    display: block;
+}

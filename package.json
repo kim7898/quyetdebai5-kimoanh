@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "child1": "^1.1.0",
+    "create-react-app": "^3.0.0"
+  }
+}
